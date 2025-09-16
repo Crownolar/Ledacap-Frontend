@@ -1,39 +1,16 @@
-// export default function ProjectForm() {
-//   return (
-//     <div className="p-6 max-w-lg mx-auto">
-//       <h1 className="text-3xl font-bold mb-6">Create Project</h1>
-
-//       <form className="bg-white p-6 rounded-xl shadow space-y-4">
-//         <div>
-//           <label className="block text-sm font-medium mb-1">Project Name</label>
-//           <input
-//             type="text"
-//             placeholder="Enter project name"
-//             className="w-full border rounded p-2"
-//           />
-//         </div>
-
-//         <div>
-//           <label className="block text-sm font-medium mb-1">Description</label>
-//           <textarea
-//             rows="4"
-//             placeholder="Enter project description"
-//             className="w-full border rounded p-2"
-//           ></textarea>
-//         </div>
-
-//         <button
-//           type="submit"
-//           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-//         >
-//           Save Project
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProjectForm() {
+  const { user } = useAuth();
+
+  if (!user || user.role !== "admin") {
+    return (
+      <div className="p-6 text-center text-red-600 font-semibold">
+        🚫 Access Denied — Only Admins can create projects.
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">
@@ -41,7 +18,6 @@ export default function ProjectForm() {
       </h1>
 
       <form className="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
-        {/* Project Name */}
         <div>
           <label className="block text-sm font-medium mb-1">Project Name</label>
           <input
@@ -51,7 +27,6 @@ export default function ProjectForm() {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block text-sm font-medium mb-1">Description</label>
           <textarea
@@ -61,7 +36,6 @@ export default function ProjectForm() {
           ></textarea>
         </div>
 
-        {/* Submit */}
         <div className="sticky bottom-0 left-0 right-0 bg-white py-3 border-t shadow-md flex justify-end">
           <button
             type="submit"

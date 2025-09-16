@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-# Ledacap-Frontend
 
 ## Expanding the ESLint configuration
 

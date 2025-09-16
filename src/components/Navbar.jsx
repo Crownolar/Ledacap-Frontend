@@ -1,91 +1,23 @@
-// import { Link, NavLink } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext";
-
-// export default function Navbar() {
-//   const { user, logout } = useAuth();
-
-//   // Dynamic links per role
-//   const roleLinks = {
-//     admin: [
-//       { to: "/dashboard/admin", label: "Dashboard" },
-//       { to: "/projects", label: "Projects" },
-//       { to: "/users", label: "Users" },
-//       { to: "/map", label: "Map" },
-//     ],
-//     researcher: [
-//       { to: "/dashboard/researcher", label: "Dashboard" },
-//       { to: "/projects", label: "Projects" },
-//       { to: "/samples", label: "Samples" },
-//     ],
-//     reviewer: [
-//       { to: "/dashboard/reviewer", label: "Dashboard" },
-//       { to: "/projects", label: "Projects" },
-//       { to: "/reviews", label: "Reviews" },
-//     ],
-//   };
-
-//   return (
-//     <nav className="bg-white shadow-md p-4 flex justify-between items-center">
-//       <NavLink to={"/"}>
-//         <h1 className="text-xl font-bold text-blue-600">Ledacap</h1>
-//       </NavLink>
-
-//       <ul className="flex gap-6 text-gray-700 font-medium items-center">
-//         {user ? (
-//           <>
-//             {/* Show username */}
-//             <li className="text-gray-500">Welcome, {user.username}</li>
-
-//             {/* Role-specific links */}
-//             {roleLinks[user.role]?.map((link) => (
-//               <li key={link.to}>
-//                 <NavLink
-//                   to={link.to}
-//                   className={({ isActive }) =>
-//                     isActive ? "text-blue-600 font-bold" : ""
-//                   }
-//                 >
-//                   {link.label}
-//                 </NavLink>
-//               </li>
-//             ))}
-
-//             {/* Common link */}
-//             <li>
-//               <NavLink to="/profile">My Profile</NavLink>
-//             </li>
-
-//             {/* Logout button */}
-//             <li>
-//               <button onClick={logout} className="text-red-500 hover:underline">
-//                 Logout
-//               </button>
-//             </li>
-//           </>
-//         ) : (
-//           <>
-//             <li>
-//               <Link to="/login">Login</Link>
-//             </li>
-//             <li>
-//               <Link to="/signup">Sign Up</Link>
-//             </li>
-//           </>
-//         )}
-//       </ul>
-//     </nav>
-//   );
-// }
-
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
-  // Role-based links
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const roleLinks = {
     admin: [
       { to: "/dashboard/admin", label: "Dashboard" },
@@ -105,79 +37,179 @@ export default function Navbar() {
     ],
   };
 
+  const dashboardPaths = [
+    ...(user ? roleLinks[user.role]?.map((link) => link.to) : []),
+    "/profile",
+  ];
+
+  const isDashboard = dashboardPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
+  const navLinkStyle = ({ isActive }) =>
+    `block px-4 py-2 rounded-md transition ${
+      isActive
+        ? "font-semibold bg-yellow-300 text-gray-900"
+        : "hover:bg-gray-100 text-gray-700"
+    }`;
+
   return (
-    <nav className="bg-white shadow-md p-4 flex justify-between items-center relative">
+    <nav className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-md p-4 flex justify-between items-center relative text-white z-50">
       <NavLink to={"/"}>
-        <h1 className="text-xl font-bold text-blue-600">Ledacap</h1>
+        <h1 className="text-2xl font-bold">Ledacap</h1>
       </NavLink>
 
-      {/* Hamburger button (mobile only) */}
       <button
-        className="lg:hidden p-2 border rounded"
+        className="lg:hidden p-2 border rounded z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
-        ☰
+        {isOpen ? "✖" : "☰"}
       </button>
 
-      {/* Links */}
-      <ul
-        className={`${
-          isOpen ? "block" : "hidden"
-        } absolute top-full left-0 w-full bg-white shadow-md p-4 lg:static lg:flex lg:w-auto lg:gap-6 lg:shadow-none`}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+
+      <div
+        className={`fixed top-0 right-0 h-full w-72 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 lg:static lg:flex lg:w-auto lg:bg-transparent lg:shadow-none lg:translate-x-0 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
-        {user ? (
-          <>
-            <li className="text-gray-500 mb-2 lg:mb-0">
-              Welcome, {user.username}
-            </li>
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between p-4 border-b lg:hidden">
+            <h2 className="text-lg font-semibold text-gray-700">Menu</h2>
+            <button
+              className="text-gray-600 text-xl"
+              onClick={() => setIsOpen(false)}
+            >
+              ✖
+            </button>
+          </div>
 
-            {roleLinks[user.role]?.map((link) => (
-              <li key={link.to} className="mb-2 lg:mb-0">
-                <NavLink
-                  to={link.to}
-                  className={({ isActive }) =>
-                    isActive ? "text-blue-600 font-bold" : ""
-                  }
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </NavLink>
-              </li>
-            ))}
-
-            <li className="mb-2 lg:mb-0">
-              <NavLink to="/profile" onClick={() => setIsOpen(false)}>
-                My Profile
-              </NavLink>
-            </li>
-
-            <li>
-              <button
-                onClick={() => {
-                  logout();
-                  setIsOpen(false);
-                }}
-                className="text-red-500 hover:underline"
-              >
-                Logout
-              </button>
-            </li>
-          </>
-        ) : (
-          <>
-            <li className="mb-2 lg:mb-0">
-              <Link to="/login" onClick={() => setIsOpen(false)}>
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link to="/signup" onClick={() => setIsOpen(false)}>
-                Sign Up
-              </Link>
-            </li>
-          </>
-        )}
-      </ul>
+          <ul className="flex flex-col gap-2 p-4 lg:flex-row lg:items-center lg:gap-6 lg:p-0">
+            {!isDashboard ? (
+              user ? (
+                <>
+                  <li>
+                    <NavLink
+                      to="/about"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      About Us
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/contact"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Contact
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/${user.role}`}
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 rounded-md text-red-500 hover:bg-red-100 transition"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <NavLink
+                      to="/about"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      About Us
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/contact"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Contact
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/signup"
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Sign Up
+                    </NavLink>
+                  </li>
+                </>
+              )
+            ) : (
+              <>
+                {roleLinks[user?.role]?.map((link) => (
+                  <li key={link.to}>
+                    <NavLink
+                      to={link.to}
+                      className={navLinkStyle}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </NavLink>
+                  </li>
+                ))}
+                <li>
+                  <NavLink
+                    to="/profile"
+                    className={navLinkStyle}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    My Profile
+                  </NavLink>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 rounded-md text-red-500 hover:bg-red-100 transition"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 }

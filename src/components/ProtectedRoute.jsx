@@ -32,21 +32,38 @@
 //   return children;
 // }
 
+// import { Navigate } from "react-router-dom";
+
+// export default function ProtectedRoute({ children, requiredRole }) {
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   // Not logged in → redirect to login
+//   if (!user) {
+//     return <Navigate to="/login" replace />;
+//   }
+
+//   // Logged in but wrong role → redirect to their own dashboard
+//   if (requiredRole && user.role !== requiredRole) {
+//     return <Navigate to={`/dashboard/${user.role}`} replace />;
+//   }
+
+//   // Otherwise render the page
+//   return children;
+// }
+
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProtectedRoute({ children, requiredRole }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useAuth();
 
-  // Not logged in → redirect to login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // Logged in but wrong role → redirect to their own dashboard
   if (requiredRole && user.role !== requiredRole) {
     return <Navigate to={`/dashboard/${user.role}`} replace />;
   }
 
-  // Otherwise render the page
   return children;
 }
