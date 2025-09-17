@@ -1,254 +1,20 @@
-// export default function SampleForm() {
-//   return (
-//     <div>
-//       <h1 className="text-2xl font-bold mb-6">Add / Edit Sample</h1>
-//       <form className="bg-white p-6 shadow rounded-lg space-y-4">
-//         <div>
-//           <label className="block font-medium">Site ID</label>
-//           <input
-//             type="text"
-//             className="w-full border p-2 rounded"
-//             placeholder="Enter site ID"
-//           />
-//         </div>
-//         <div>
-//           <label className="block font-medium">Type</label>
-//           <select className="w-full border p-2 rounded">
-//             <option>Soil</option>
-//             <option>Water</option>
-//             <option>Air</option>
-//           </select>
-//         </div>
-//         <div>
-//           <label className="block font-medium">Status</label>
-//           <select className="w-full border p-2 rounded">
-//             <option>Pending</option>
-//             <option>Reviewed</option>
-//             <option>Analyzed</option>
-//           </select>
-//         </div>
-//         <div>
-//           <label className="block font-medium">Notes</label>
-//           <textarea className="w-full border p-2 rounded" rows="3"></textarea>
-//         </div>
-//         <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-//           Save Sample
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// import { useParams, useNavigate } from "react-router-dom";
-// import { useState, useEffect } from "react";
-
-// export default function SampleForm() {
-//   const { id } = useParams(); // if editing, id will exist
-//   const navigate = useNavigate();
-
-//   // Mock data if editing
-//   const existingSample = {
-//     id: 1,
-//     site_id: "Site A",
-//     sample_type: "Soil",
-//     status: "pending",
-//     collected_by: "Yusuf",
-//     date_collected: "2025-08-15",
-//     lead_level: "45 ppm",
-//     notes: "Collected near school compound",
-//     gps: { lat: "8.4956", lng: "4.5503" },
-//   };
-
-//   const [formData, setFormData] = useState({
-//     site_id: "",
-//     sample_type: "Soil",
-//     status: "pending",
-//     collected_by: "Current User",
-//     date_collected: "",
-//     lead_level: "",
-//     notes: "",
-//     gps_lat: "",
-//     gps_lng: "",
-//   });
-
-//   useEffect(() => {
-//     if (id) {
-//       // Editing case → load sample (mock for now)
-//       setFormData({
-//         site_id: existingSample.site_id,
-//         sample_type: existingSample.sample_type,
-//         status: existingSample.status,
-//         collected_by: existingSample.collected_by,
-//         date_collected: existingSample.date_collected,
-//         lead_level: existingSample.lead_level,
-//         notes: existingSample.notes,
-//         gps_lat: existingSample.gps.lat,
-//         gps_lng: existingSample.gps.lng,
-//       });
-//     }
-//   }, [id]);
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     if (id) {
-//       console.log("Updating sample:", formData);
-//     } else {
-//       console.log("Creating new sample:", formData);
-//     }
-
-//     // Redirect back to samples list
-//     navigate("/samples");
-//   };
-
-//   return (
-//     <div>
-//       <h1 className="text-2xl font-bold mb-6">
-//         {id ? "Edit Sample" : "Add New Sample"}
-//       </h1>
-
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-white shadow rounded-lg p-6 space-y-4"
-//       >
-//         <div>
-//           <label className="block text-gray-700">Site ID</label>
-//           <input
-//             type="text"
-//             name="site_id"
-//             value={formData.site_id}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//             required
-//           />
-//         </div>
-
-//         <div>
-//           <label className="block text-gray-700">Sample Type</label>
-//           <select
-//             name="sample_type"
-//             value={formData.sample_type}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//           >
-//             <option value="Soil">Soil</option>
-//             <option value="Water">Water</option>
-//             <option value="Paint">Paint</option>
-//           </select>
-//         </div>
-
-//         <div>
-//           <label className="block text-gray-700">Status</label>
-//           <select
-//             name="status"
-//             value={formData.status}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//           >
-//             <option value="pending">Pending</option>
-//             <option value="analyzed">Analyzed</option>
-//             <option value="reviewed">Reviewed</option>
-//           </select>
-//         </div>
-
-//         <div>
-//           <label className="block text-gray-700">Date Collected</label>
-//           <input
-//             type="date"
-//             name="date_collected"
-//             value={formData.date_collected}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//             required
-//           />
-//         </div>
-
-//         <div>
-//           <label className="block text-gray-700">Lead Level (ppm)</label>
-//           <input
-//             type="text"
-//             name="lead_level"
-//             value={formData.lead_level}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//             placeholder="e.g. 45 ppm"
-//           />
-//         </div>
-
-//         <div>
-//           <label className="block text-gray-700">Notes</label>
-//           <textarea
-//             name="notes"
-//             value={formData.notes}
-//             onChange={handleChange}
-//             className="border p-2 rounded w-full"
-//             rows="3"
-//           />
-//         </div>
-
-//         <div className="grid md:grid-cols-2 gap-4">
-//           <div>
-//             <label className="block text-gray-700">GPS Latitude</label>
-//             <input
-//               type="text"
-//               name="gps_lat"
-//               value={formData.gps_lat}
-//               onChange={handleChange}
-//               className="border p-2 rounded w-full"
-//             />
-//           </div>
-//           <div>
-//             <label className="block text-gray-700">GPS Longitude</label>
-//             <input
-//               type="text"
-//               name="gps_lng"
-//               value={formData.gps_lng}
-//               onChange={handleChange}
-//               className="border p-2 rounded w-full"
-//             />
-//           </div>
-//         </div>
-
-//         <button
-//           type="submit"
-//           className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-//         >
-//           {id ? "Update Sample" : "Create Sample"}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+
+const STORAGE_KEY = "samples";
 
 export default function SampleForm() {
-  const { id } = useParams(); // if editing, id will exist
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get("projectId");
+
   const navigate = useNavigate();
 
-  // Mock data if editing
-  const existingSample = {
-    id: 1,
-    site_id: "Site A",
-    sample_type: "Soil",
-    status: "pending",
-    collected_by: "Yusuf",
-    date_collected: "2025-08-15",
-    lead_level: "45 ppm",
-    notes: "Collected near school compound",
-    gps: { lat: "8.4956", lng: "4.5503" },
-  };
-
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     site_id: "",
     sample_type: "Soil",
     status: "pending",
-    collected_by: "Current User",
+    collected_by: "",
     date_collected: "",
     lead_level: "",
     notes: "",
@@ -258,66 +24,75 @@ export default function SampleForm() {
 
   useEffect(() => {
     if (id) {
-      setFormData({
-        site_id: existingSample.site_id,
-        sample_type: existingSample.sample_type,
-        status: existingSample.status,
-        collected_by: existingSample.collected_by,
-        date_collected: existingSample.date_collected,
-        lead_level: existingSample.lead_level,
-        notes: existingSample.notes,
-        gps_lat: existingSample.gps.lat,
-        gps_lng: existingSample.gps.lng,
-      });
+      const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const found = samples.find((s) => String(s.id) === id);
+      if (found) {
+        setForm({
+          site_id: found.site_id || "",
+          sample_type: found.sample_type || "Soil",
+          status: found.status || "pending",
+          collected_by: found.collected_by || "",
+          date_collected: found.date_collected || "",
+          lead_level: found.lead_level || "",
+          notes: found.notes || "",
+          gps_lat: found.gps?.lat || "",
+          gps_lng: found.gps?.lng || "",
+        });
+      }
     }
   }, [id]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    let samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
     if (id) {
-      console.log("Updating sample:", formData);
+      samples = samples.map((s) =>
+        String(s.id) === id
+          ? { ...s, ...form, gps: { lat: form.gps_lat, lng: form.gps_lng } }
+          : s
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
+      alert("✅ Sample updated successfully!");
+      navigate(`/samples/${id}`);
     } else {
-      console.log("Creating new sample:", formData);
+      const newSample = {
+        id: Date.now().toString(),
+        projectId: projectId || null,
+        ...form,
+        gps: { lat: form.gps_lat, lng: form.gps_lng },
+      };
+      samples.push(newSample);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
+      alert("✅ Sample created successfully!");
+      if (projectId) {
+        navigate(`/projects/${projectId}`);
+      } else {
+        navigate(`/samples/${newSample.id}`);
+      }
     }
-    navigate("/samples");
   };
 
   return (
-    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
-      {/* Back button */}
-      <div className="sticky top-0 z-10 bg-gray-50 py-2">
-        <button
-          onClick={() => navigate(-1)}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
-        >
-          ← Back
-        </button>
-      </div>
-
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">
-        {id ? "Edit Sample" : "Add New Sample"}
-      </h1>
-
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow rounded-xl p-4 sm:p-6 space-y-4"
+        className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg space-y-6"
       >
+        <h2 className="text-2xl font-bold text-gray-800 text-center">
+          {id ? "Edit Sample" : "New Sample"}
+        </h2>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Site ID
           </label>
           <input
             type="text"
-            name="site_id"
-            value={formData.site_id}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
-            placeholder="Enter site ID"
-            required
+            placeholder="Enter Site ID"
+            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={form.site_id}
+            onChange={(e) => setForm({ ...form, site_id: e.target.value })}
           />
         </div>
 
@@ -326,10 +101,9 @@ export default function SampleForm() {
             Sample Type
           </label>
           <select
-            name="sample_type"
-            value={formData.sample_type}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
+            value={form.sample_type}
+            onChange={(e) => setForm({ ...form, sample_type: e.target.value })}
+            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="Soil">Soil</option>
             <option value="Water">Water</option>
@@ -337,61 +111,60 @@ export default function SampleForm() {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Status
-          </label>
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
-          >
-            <option value="pending">Pending</option>
-            <option value="analyzed">Analyzed</option>
-            <option value="reviewed">Reviewed</option>
-          </select>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Collected By
+            </label>
+            <input
+              type="text"
+              placeholder="Name of collector"
+              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.collected_by}
+              onChange={(e) =>
+                setForm({ ...form, collected_by: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Date Collected
+            </label>
+            <input
+              type="date"
+              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.date_collected}
+              onChange={(e) =>
+                setForm({ ...form, date_collected: e.target.value })
+              }
+            />
+          </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Date Collected
-          </label>
-          <input
-            type="date"
-            name="date_collected"
-            value={formData.date_collected}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Lead Level (ppm)
+            Lead Level
           </label>
           <input
             type="text"
-            name="lead_level"
-            value={formData.lead_level}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
-            placeholder="e.g. 45 ppm"
+            placeholder="Enter lead level"
+            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={form.lead_level}
+            onChange={(e) => setForm({ ...form, lead_level: e.target.value })}
           />
         </div>
 
+        {/* Notes */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Notes
           </label>
           <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            className="border p-2 rounded w-full text-sm sm:text-base"
-            rows="3"
-            placeholder="Extra details about the sample..."
+            placeholder="Additional notes..."
+            rows={3}
+            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
           />
         </div>
 
@@ -402,11 +175,10 @@ export default function SampleForm() {
             </label>
             <input
               type="text"
-              name="gps_lat"
-              value={formData.gps_lat}
-              onChange={handleChange}
-              className="border p-2 rounded w-full text-sm sm:text-base"
-              placeholder="e.g. 8.4956"
+              placeholder="Latitude"
+              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.gps_lat}
+              onChange={(e) => setForm({ ...form, gps_lat: e.target.value })}
             />
           </div>
           <div>
@@ -415,21 +187,27 @@ export default function SampleForm() {
             </label>
             <input
               type="text"
-              name="gps_lng"
-              value={formData.gps_lng}
-              onChange={handleChange}
-              className="border p-2 rounded w-full text-sm sm:text-base"
-              placeholder="e.g. 4.5503"
+              placeholder="Longitude"
+              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.gps_lng}
+              onChange={(e) => setForm({ ...form, gps_lng: e.target.value })}
             />
           </div>
         </div>
 
-        <div className="sticky bottom-0 left-0 right-0 bg-white py-3 border-t shadow-md flex justify-end">
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => navigate("/samples")}
+            className="px-4 py-2 rounded-md border border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 text-sm sm:text-base"
+            className="px-6 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
           >
-            {id ? "Update Sample" : "Create Sample"}
+            {id ? "Update Sample" : "Save Sample"}
           </button>
         </div>
       </form>

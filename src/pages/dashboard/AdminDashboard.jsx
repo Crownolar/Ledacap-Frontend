@@ -11,7 +11,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Dummy chart data
 const sampleTrends = [
   { month: "Jan", lead: 20 },
   { month: "Feb", lead: 40 },
@@ -30,7 +29,6 @@ export default function AdminDashboard() {
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
           <h2 className="text-base sm:text-lg font-semibold">Total Projects</h2>
@@ -48,7 +46,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
           <h2 className="text-base sm:text-lg font-semibold mb-4">

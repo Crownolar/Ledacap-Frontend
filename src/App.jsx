@@ -2,7 +2,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Pages
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProjectsList from "./pages/projects/ProjectList";
@@ -24,13 +23,11 @@ import Home from "./pages/Home";
 import Signup from "./pages/auth/Signup";
 import Reviews from "./pages/reviews/Reviews";
 
-// Later we will add Samples + Map
 export default function App() {
   console.log("App loaded ✅");
 
   const location = useLocation();
 
-  // Hide Navbar on these routes
   const hideNavbarRoutes = [
     "/login",
     "/signup",

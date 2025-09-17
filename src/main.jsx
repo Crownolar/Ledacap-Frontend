@@ -5,12 +5,15 @@ import App from "./App";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "./context/AuthContext";
+import { SampleProvider } from "./context/SampleContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <SampleProvider>
+          <App />
+        </SampleProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>
