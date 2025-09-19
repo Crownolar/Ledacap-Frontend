@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const STORAGE_KEY = "samples";
 
@@ -15,7 +16,7 @@ export default function SampleForm() {
     sample_type: "Soil",
     status: "pending",
     collected_by: "",
-    date_collected: "",
+    date_collected: new Date().toISOString().split("T")[0],
     lead_level: "",
     notes: "",
     gps_lat: "",
@@ -32,39 +33,64 @@ export default function SampleForm() {
           sample_type: found.sample_type || "Soil",
           status: found.status || "pending",
           collected_by: found.collected_by || "",
-          date_collected: found.date_collected || "",
+          date_collected:
+            found.date_collected || new Date().toISOString().split("T")[0],
           lead_level: found.lead_level || "",
           notes: found.notes || "",
-          gps_lat: found.gps?.lat || "",
-          gps_lng: found.gps?.lng || "",
+          gps_lat: found.gps?.lat?.toString() || "",
+          gps_lng: found.gps?.lng?.toString() || "",
         });
       }
     }
   }, [id]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!form.site_id || !form.collected_by || !form.date_collected) {
+      toast.error(
+        "Please fill all required fields (Site ID, Collected By, Date)."
+      );
+      return;
+    }
+
     let samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 
     if (id) {
       samples = samples.map((s) =>
         String(s.id) === id
-          ? { ...s, ...form, gps: { lat: form.gps_lat, lng: form.gps_lng } }
+          ? {
+              ...s,
+              ...form,
+              projectId: s.projectId || projectId || null,
+              gps: {
+                lat: parseFloat(form.gps_lat) || null,
+                lng: parseFloat(form.gps_lng) || null,
+              },
+            }
           : s
       );
       localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
-      alert("✅ Sample updated successfully!");
+      toast.success("Sample updated successfully!");
       navigate(`/samples/${id}`);
     } else {
       const newSample = {
         id: Date.now().toString(),
         projectId: projectId || null,
         ...form,
-        gps: { lat: form.gps_lat, lng: form.gps_lng },
+        gps: {
+          lat: parseFloat(form.gps_lat) || null,
+          lng: parseFloat(form.gps_lng) || null,
+        },
       };
       samples.push(newSample);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
-      alert("✅ Sample created successfully!");
+      toast.success("Sample created successfully!");
       if (projectId) {
         navigate(`/projects/${projectId}`);
       } else {
@@ -85,14 +111,16 @@ export default function SampleForm() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Site ID
+            Site ID <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
+            name="site_id"
             placeholder="Enter Site ID"
             className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={form.site_id}
-            onChange={(e) => setForm({ ...form, site_id: e.target.value })}
+            onChange={handleChange}
+            required
           />
         </div>
 
@@ -101,8 +129,9 @@ export default function SampleForm() {
             Sample Type
           </label>
           <select
+            name="sample_type"
             value={form.sample_type}
-            onChange={(e) => setForm({ ...form, sample_type: e.target.value })}
+            onChange={handleChange}
             className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="Soil">Soil</option>
@@ -111,32 +140,48 @@ export default function SampleForm() {
           </select>
         </div>
 
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Status
+          </label>
+          <select
+            name="status"
+            value={form.status}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="pending">Pending</option>
+            <option value="cleared">Cleared</option>
+            <option value="high-risk">High Risk</option>
+          </select>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Collected By
+              Collected By <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
+              name="collected_by"
               placeholder="Name of collector"
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={form.collected_by}
-              onChange={(e) =>
-                setForm({ ...form, collected_by: e.target.value })
-              }
+              onChange={handleChange}
+              required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date Collected
+              Date Collected <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
+              name="date_collected"
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={form.date_collected}
-              onChange={(e) =>
-                setForm({ ...form, date_collected: e.target.value })
-              }
+              onChange={handleChange}
+              required
             />
           </div>
         </div>
@@ -147,24 +192,25 @@ export default function SampleForm() {
           </label>
           <input
             type="text"
+            name="lead_level"
             placeholder="Enter lead level"
             className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={form.lead_level}
-            onChange={(e) => setForm({ ...form, lead_level: e.target.value })}
+            onChange={handleChange}
           />
         </div>
 
-        {/* Notes */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Notes
           </label>
           <textarea
+            name="notes"
             placeholder="Additional notes..."
             rows={3}
             className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={form.notes}
-            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            onChange={handleChange}
           />
         </div>
 
@@ -175,10 +221,11 @@ export default function SampleForm() {
             </label>
             <input
               type="text"
+              name="gps_lat"
               placeholder="Latitude"
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={form.gps_lat}
-              onChange={(e) => setForm({ ...form, gps_lat: e.target.value })}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -187,10 +234,11 @@ export default function SampleForm() {
             </label>
             <input
               type="text"
+              name="gps_lng"
               placeholder="Longitude"
               className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={form.gps_lng}
-              onChange={(e) => setForm({ ...form, gps_lng: e.target.value })}
+              onChange={handleChange}
             />
           </div>
         </div>

@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const STORAGE_KEY = "samples";
 
 export default function SampleList() {
   const [samples, setSamples] = useState([]);
   const location = useLocation();
+  const { projectId } = useParams();
 
   const loadSamples = () => {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    setSamples(stored);
+
+    if (projectId) {
+      setSamples(stored.filter((s) => String(s.site_id) === String(projectId)));
+    } else {
+      setSamples(stored);
+    }
   };
 
   useEffect(() => {
@@ -25,15 +31,25 @@ export default function SampleList() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [projectId]);
 
   useEffect(() => {
     loadSamples();
-  }, [location]);
+  }, [location, projectId]);
+
+  const navigate = useNavigate();
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Samples</h1>
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+      >
+        ← Back
+      </button>
+      <h1 className="text-2xl font-bold mb-4">
+        {projectId ? `Samples for Project ${projectId}` : "All Samples"}
+      </h1>
 
       {samples.length === 0 ? (
         <p className="text-gray-600">No samples yet. Add one!</p>
@@ -62,7 +78,7 @@ export default function SampleList() {
       )}
 
       <Link
-        to="/samples/new"
+        to={projectId ? `/projects/${projectId}/samples/new` : "/samples/new"}
         className="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
       >
         ➕ Add Sample

@@ -22,6 +22,8 @@ export default function Navbar() {
     admin: [
       { to: "/dashboard/admin", label: "Dashboard" },
       { to: "/projects", label: "Projects" },
+      { to: "/samples", label: "Samples" },
+      { to: "/reviews", label: "Reviews" },
       { to: "/users", label: "Users" },
       { to: "/map", label: "Map" },
     ],
@@ -40,6 +42,8 @@ export default function Navbar() {
   const dashboardPaths = [
     ...(user ? roleLinks[user.role]?.map((link) => link.to) : []),
     "/profile",
+    "/samples",
+    "/projects/new",
   ];
 
   const isDashboard = dashboardPaths.some((path) =>

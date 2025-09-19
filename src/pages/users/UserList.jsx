@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function UserList() {
   const users = [
     { id: 1, username: "admin", role: "Admin", email: "admin@example.com" },
@@ -35,12 +37,12 @@ export default function UserList() {
                 <td className="px-4 py-2">{u.email}</td>
                 <td className="px-4 py-2">{u.role}</td>
                 <td className="px-4 py-2">
-                  <a
-                    href={`/users/${u.id}`}
+                  <Link
+                    to={`/users/${u.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     View
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ))}
