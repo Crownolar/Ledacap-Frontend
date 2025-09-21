@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import About from "./About";
 
 export default function Home() {
   const { user, logout } = useAuth();
@@ -52,7 +53,7 @@ export default function Home() {
 
         <div className="mt-8 md:mt-0 md:w-1/2 flex justify-center">
           <img
-            src="/hero-image.svg"
+            src="/LedacapIcons.png"
             alt="Ledacap"
             className="w-3/4 md:w-full animate-bounce-slow"
           />
@@ -60,41 +61,7 @@ export default function Home() {
       </section>
 
       <section className="py-20 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-6 text-blue-600">About Us</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-6">
-          At <span className="font-semibold text-indigo-600">Ledacap</span>, we
-          are committed to driving digital transformation by creating
-          cutting-edge solutions for administrators, researchers, and reviewers.
-          <br />
-          <br />
-          <strong>Our Mission:</strong> Empower innovation through technology.{" "}
-          <br />
-          <strong>Our Vision:</strong> Build a future where collaboration fuels
-          progress. <br />
-          <strong>Our Values:</strong> Integrity, Growth, and Excellence.
-        </p>
-        <Link
-          to="/about"
-          className="mt-6 inline-block text-blue-600 hover:underline"
-        >
-          Discover more →
-        </Link>
-      </section>
-
-      <section className="py-20 bg-gray-100 text-center">
-        <h2 className="text-3xl font-bold mb-6 text-indigo-700">
-          Get in Touch
-        </h2>
-        <p className="text-gray-600 mb-4 max-w-lg mx-auto">
-          Have questions or want to collaborate with us? We’d love to hear from
-          you.
-        </p>
-        <Link
-          to="/contact"
-          className="px-8 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
-        >
-          Contact Us
-        </Link>
+        <About />
       </section>
 
       <footer className="bg-gray-900 text-gray-300 py-6 text-center">
