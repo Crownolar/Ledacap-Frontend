@@ -55,7 +55,7 @@ export default function Home() {
           <img
             src="/LedacapIcons.png"
             alt="Ledacap"
-            className="w-3/4 md:w-full animate-bounce-slow"
+            className="w-3/4 md:w-full drop-shadow-xl animate-pulse"
           />
         </div>
       </section>

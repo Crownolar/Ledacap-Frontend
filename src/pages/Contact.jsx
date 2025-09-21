@@ -1,5 +1,5 @@
 import { useState } from "react";
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser"; // ✅ use the correct package
 import { Link } from "react-router-dom";
 
 export default function Contact() {
@@ -21,30 +21,29 @@ export default function Contact() {
 
     emailjs
       .send(
-        "YOUR_SERVICE_ID",
-        "YOUR_TEMPLATE_ID",
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         {
           to_name: "Ledacap Support Team",
           from_name: formData.from_name,
           reply_to: formData.reply_to,
           message: formData.message,
-          logo_url: "https://yourdomain.com/LedacapIcons.png",
+          logo_url: "https://i.imgur.com/Oc2Wb1r.png",
           current_year: new Date().getFullYear(),
         },
-        "YcEmQD5OgxmK121Pg"
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
       .then(
         () => {
           alert("✅ Message sent successfully!");
           setFormData({ from_name: "", reply_to: "", message: "" });
-          setLoading(false);
         },
         (error) => {
-          console.error("Email error:", error);
+          console.error("EmailJS Error:", error);
           alert("❌ Failed to send message. Please try again.");
-          setLoading(false);
         }
-      );
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
