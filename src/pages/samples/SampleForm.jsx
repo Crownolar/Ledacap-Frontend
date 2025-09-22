@@ -23,6 +23,25 @@ export default function SampleForm() {
     gps_lng: "",
   });
 
+  // ✅ Auto-fetch GPS on mount (if not editing or missing GPS)
+  useEffect(() => {
+    if (!id) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setForm((prev) => ({
+            ...prev,
+            gps_lat: pos.coords.latitude.toFixed(6),
+            gps_lng: pos.coords.longitude.toFixed(6),
+          }));
+        },
+        (err) => {
+          console.warn("GPS not available:", err.message);
+        }
+      );
+    }
+  }, [id]);
+
+  // ✅ Load existing sample if editing
   useEffect(() => {
     if (id) {
       const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -40,6 +59,22 @@ export default function SampleForm() {
           gps_lat: found.gps?.lat?.toString() || "",
           gps_lng: found.gps?.lng?.toString() || "",
         });
+
+        // If GPS missing, auto-fetch
+        if (!found.gps?.lat || !found.gps?.lng) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              setForm((prev) => ({
+                ...prev,
+                gps_lat: pos.coords.latitude.toFixed(6),
+                gps_lng: pos.coords.longitude.toFixed(6),
+              }));
+            },
+            (err) => {
+              console.warn("GPS not available:", err.message);
+            }
+          );
+        }
       }
     }
   }, [id]);
@@ -100,7 +135,13 @@ export default function SampleForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-4 px-3 py-1 mr-52 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+      >
+        ← Back
+      </button>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg space-y-6"

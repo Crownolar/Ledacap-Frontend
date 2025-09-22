@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Dialog } from "@headlessui/react";
 
 const STORAGE_KEY = "samples";
+const PROJECT_KEY = "projects";
 
 export default function SampleList() {
   const [samples, setSamples] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const location = useLocation();
   const { projectId } = useParams();
+  const navigate = useNavigate();
 
   const loadSamples = () => {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-
     if (projectId) {
       setSamples(stored.filter((s) => String(s.site_id) === String(projectId)));
     } else {
@@ -18,12 +23,21 @@ export default function SampleList() {
     }
   };
 
+  const loadProjects = () => {
+    const storedProjects = JSON.parse(
+      localStorage.getItem(PROJECT_KEY) || "[]"
+    );
+    setProjects(storedProjects);
+  };
+
   useEffect(() => {
     loadSamples();
+    loadProjects();
 
     const handleStorageChange = (e) => {
-      if (e.key === STORAGE_KEY) {
+      if (e.key === STORAGE_KEY || e.key === PROJECT_KEY) {
         loadSamples();
+        loadProjects();
       }
     };
     window.addEventListener("storage", handleStorageChange);
@@ -37,7 +51,20 @@ export default function SampleList() {
     loadSamples();
   }, [location, projectId]);
 
-  const navigate = useNavigate();
+  const handleAddSampleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleChoose = (choice) => {
+    setIsModalOpen(false);
+    if (choice === "createProject") {
+      navigate("/projects/new");
+    } else if (choice === "chooseProject") {
+      navigate("/projects");
+    } else if (choice === "currentProject" && projectId) {
+      navigate(`/projects/${projectId}/samples/new`);
+    }
+  };
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -77,12 +104,62 @@ export default function SampleList() {
         </ul>
       )}
 
-      <Link
-        to={projectId ? `/projects/${projectId}/samples/new` : "/samples/new"}
+      <button
+        onClick={handleAddSampleClick}
         className="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
       >
         ➕ Add Sample
-      </Link>
+      </button>
+
+      {/* Modal */}
+      <Dialog
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        className="fixed inset-0 z-50 flex items-center justify-center"
+      >
+        <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
+        <div className="bg-white rounded-xl shadow-lg p-6 w-96 relative z-10">
+          <Dialog.Title className="text-lg font-bold mb-2">
+            Add a Sample
+          </Dialog.Title>
+          <p className="text-gray-600 mb-4">
+            To create a sample, you need to either select an existing project or
+            create a new one.
+          </p>
+
+          <div className="space-y-3">
+            {projectId && (
+              <button
+                onClick={() => handleChoose("currentProject")}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                ➕ Add to Current Project
+              </button>
+            )}
+            {projects.length > 0 && (
+              <button
+                onClick={() => handleChoose("chooseProject")}
+                className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              >
+                📂 Choose Exisiting Project
+              </button>
+            )}
+            <button
+              onClick={() => handleChoose("createProject")}
+              className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              🆕 Create New Project
+            </button>
+          </div>
+
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="mt-4 w-full px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </Dialog>
     </div>
   );
 }

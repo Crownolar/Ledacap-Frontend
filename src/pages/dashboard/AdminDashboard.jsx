@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   PieChart,
   Pie,
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [samples, setSamples] = useState([]);
   const [highRisk, setHighRisk] = useState([]);
   const [growthData, setGrowthData] = useState([]);
+  const navigate = useNavigate();
 
   const loadData = () => {
     const storedProjects = JSON.parse(
@@ -96,6 +98,12 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 space-y-10">
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+      >
+        ← Back
+      </button>
       <h1 className="text-2xl font-bold">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
