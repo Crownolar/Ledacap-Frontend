@@ -6,6 +6,7 @@ import "./index.css";
 import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "./context/AuthContext";
 import { SampleProvider } from "./context/SampleContext";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <SampleProvider>
           <App />
+          <Toaster position="top-right" reverseOrder={false} />
         </SampleProvider>
       </AuthProvider>
     </BrowserRouter>

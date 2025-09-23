@@ -23,7 +23,6 @@ export default function SampleForm() {
     gps_lng: "",
   });
 
-  // ✅ Auto-fetch GPS on mount (if not editing or missing GPS)
   useEffect(() => {
     if (!id) {
       navigator.geolocation.getCurrentPosition(
@@ -41,7 +40,6 @@ export default function SampleForm() {
     }
   }, [id]);
 
-  // ✅ Load existing sample if editing
   useEffect(() => {
     if (id) {
       const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -60,7 +58,6 @@ export default function SampleForm() {
           gps_lng: found.gps?.lng?.toString() || "",
         });
 
-        // If GPS missing, auto-fetch
         if (!found.gps?.lat || !found.gps?.lng) {
           navigator.geolocation.getCurrentPosition(
             (pos) => {

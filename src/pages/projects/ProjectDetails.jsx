@@ -1,5 +1,6 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ProjectDetails() {
   const { id } = useParams();
@@ -27,6 +28,46 @@ export default function ProjectDetails() {
     );
   }
 
+  const handleDelete = () => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p>Are you sure you want to delete this project?</p>
+        <div className="flex gap-2">
+          <button
+            className="bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+            onClick={() => {
+              const storedProjects =
+                JSON.parse(localStorage.getItem("projects")) || [];
+              const updatedProjects = storedProjects.filter(
+                (p) => String(p.id) !== String(id)
+              );
+              localStorage.setItem("projects", JSON.stringify(updatedProjects));
+
+              const storedSamples =
+                JSON.parse(localStorage.getItem("samples")) || [];
+              const updatedSamples = storedSamples.filter(
+                (s) => String(s.projectId) !== String(id)
+              );
+              localStorage.setItem("samples", JSON.stringify(updatedSamples));
+
+              toast.dismiss(t.id);
+              toast.success("🗑️ Project deleted successfully!");
+              navigate("/projects");
+            }}
+          >
+            Confirm
+          </button>
+          <button
+            className="bg-gray-400 text-white px-3 py-1 rounded cursor-pointer"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <div className="p-4 sm:p-6">
       <button
@@ -45,6 +86,12 @@ export default function ProjectDetails() {
           >
             Edit
           </Link>
+          <button
+            onClick={handleDelete}
+            className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm sm:text-base cursor-pointer"
+          >
+            Delete
+          </button>
         </div>
       </div>
 
@@ -55,7 +102,7 @@ export default function ProjectDetails() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
         <h2 className="text-lg sm:text-xl font-semibold">Samples</h2>
         <Link
-          to={`/samples/new?projectId=${id}`} // <-- pass projectId
+          to={`/samples/new?projectId=${id}`}
           className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm sm:text-base text-center"
         >
           + Add Sample
