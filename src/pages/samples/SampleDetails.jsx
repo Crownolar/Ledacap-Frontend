@@ -78,6 +78,7 @@
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ArrowLeft, Pencil } from "lucide-react";
 
 const STORAGE_KEY = "samples";
 
@@ -90,7 +91,6 @@ export default function SampleDetails() {
     const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const found = samples.find((s) => String(s.id) === id);
     if (found) {
-      // If no GPS stored, auto-fetch location
       if (!found.gps) {
         navigator.geolocation.getCurrentPosition(
           (pos) => {
@@ -100,7 +100,6 @@ export default function SampleDetails() {
             };
             found.gps = gps;
 
-            // Update storage so it persists
             const updated = samples.map((s) =>
               String(s.id) === id ? { ...s, gps } : s
             );
@@ -141,10 +140,9 @@ export default function SampleDetails() {
         onClick={() => navigate(-1)}
         className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
       >
-        ← Back
+        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
 
-      {/* 🔥 Show project name instead of ID */}
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         {sample.project_name || `Sample #${sample.id}`}
       </h1>
@@ -169,17 +167,17 @@ export default function SampleDetails() {
         onClick={() => navigate(`/samples/${id}/edit`)}
         className="mt-8 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
       >
-        ✏️ Edit Sample
+        <Pencil className="w-5 h-5 text-white" />
       </button>
     </div>
   );
 }
 
-function DetailCard({ label, value }) {
+const DetailCard = ({ label, value }) => {
   return (
     <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="font-semibold text-gray-800">{value}</p>
     </div>
   );
-}
+};

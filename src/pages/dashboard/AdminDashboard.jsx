@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -102,7 +103,7 @@ export default function Dashboard() {
         onClick={() => navigate(-1)}
         className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
       >
-        ← Back
+        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
       <h1 className="text-2xl font-bold">Dashboard</h1>
 

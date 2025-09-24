@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
+import { ArrowLeft, Plus } from "lucide-react";
 
 const STORAGE_KEY = "samples";
 const PROJECT_KEY = "projects";
@@ -72,7 +73,7 @@ export default function SampleList() {
         onClick={() => navigate(-1)}
         className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
       >
-        ← Back
+        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
       <h1 className="text-2xl font-bold mb-4">
         {projectId ? `Samples for Project ${projectId}` : "All Samples"}
@@ -108,7 +109,7 @@ export default function SampleList() {
         onClick={handleAddSampleClick}
         className="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
       >
-        ➕ Add Sample
+        <Plus className="w-5 h-5 text-white" />
       </button>
 
       {/* Modal */}

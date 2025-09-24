@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
@@ -16,7 +17,7 @@ export default function ProjectsList() {
         onClick={() => navigate(-1)}
         className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
       >
-        ← Back
+        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">

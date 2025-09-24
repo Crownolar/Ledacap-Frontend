@@ -65,7 +65,7 @@ export default function ProjectForm() {
       toast.success("✅ Project created successfully!");
     }
 
-    navigate("/projects");
+    setTimeout(() => navigate("/projects"), 3000);
   };
 
   return (

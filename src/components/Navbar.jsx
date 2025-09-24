@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { AlignJustify, CircleX, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -67,7 +68,7 @@ export default function Navbar() {
         className="lg:hidden p-2 border rounded z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? "✖" : "☰"}
+        {isOpen ? <CircleX size={28} /> : <AlignJustify size={20} />}
       </button>
 
       {isOpen && (
@@ -89,7 +90,7 @@ export default function Navbar() {
               className="text-gray-600 text-xl"
               onClick={() => setIsOpen(false)}
             >
-              ✖
+              <CircleX size={24} />
             </button>
           </div>
 
