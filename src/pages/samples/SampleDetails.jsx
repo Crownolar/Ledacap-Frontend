@@ -58,12 +58,20 @@ export default function SampleDetails() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-xl">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm"
-      >
-        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
-      </button>
+      <div className="flex justify-between items-center gap-3 mb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className=" px-3 py-1 rounded hover:bg-gray-200 text-sm"
+        >
+          <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
+        </button>
+        <button
+          onClick={() => navigate(`/samples/${id}/edit`)}
+          className=" px-6 py-2 rounded-lg hover:bg-yellow-200"
+        >
+          <Pencil className="w-5 h-5 text-yellow-500" />
+        </button>
+      </div>
 
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         {sample.project_name || `Sample #${sample.id}`}
@@ -84,13 +92,6 @@ export default function SampleDetails() {
           }
         />
       </div>
-
-      <button
-        onClick={() => navigate(`/samples/${id}/edit`)}
-        className="mt-8 px-6 py-2 rounded-lg hover:bg-yellow-200"
-      >
-        <Pencil className="w-5 h-5 text-yellow-500" />
-      </button>
     </div>
   );
 }

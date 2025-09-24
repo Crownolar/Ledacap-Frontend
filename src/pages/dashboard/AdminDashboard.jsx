@@ -101,7 +101,7 @@ export default function Dashboard() {
     <div className="p-6 space-y-10">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
       >
         <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>

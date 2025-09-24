@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Eye, Plus } from "lucide-react";
 
 const STORAGE_KEY = "samples";
 const PROJECT_KEY = "projects";
@@ -69,12 +69,21 @@ export default function SampleList() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
-      >
-        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
-      </button>
+      <div className="flex justify-between items-center gap-3 mb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
+        >
+          <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
+        </button>
+
+        <button
+          onClick={handleAddSampleClick}
+          className="px-4 py-2 rounded-lg hover:bg-green-200"
+        >
+          <Plus className="w-5 h-5 text-green-600" />
+        </button>
+      </div>
       <h1 className="text-2xl font-bold mb-4">
         {projectId ? `Samples for Project ${projectId}` : "All Samples"}
       </h1>
@@ -98,19 +107,12 @@ export default function SampleList() {
                 to={`/samples/${s.id}`}
                 className="text-blue-600 hover:underline"
               >
-                View →
+                <Eye className="w-5 h-5 text-blue-600" title="View Sample" />
               </Link>
             </li>
           ))}
         </ul>
       )}
-
-      <button
-        onClick={handleAddSampleClick}
-        className="mt-6 inline-block px-4 py-2 rounded-lg hover:bg-green-200"
-      >
-        <Plus className="w-5 h-5 text-green-600" />
-      </button>
 
       <Dialog
         open={isModalOpen}
