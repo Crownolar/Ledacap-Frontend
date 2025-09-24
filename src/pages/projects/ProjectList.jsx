@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, Plus } from "lucide-react";
 
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
@@ -15,7 +15,7 @@ export default function ProjectsList() {
     <div className="p-4 sm:p-6">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+        className="mb-4 px-3 py-1 hover:bg-gray-200 text-sm sm:text-base"
       >
         <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
@@ -24,9 +24,9 @@ export default function ProjectsList() {
         <h1 className="text-2xl sm:text-3xl font-bold">Projects</h1>
         <Link
           to="/projects/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm sm:text-base text-center"
+          className=" px-4 py-2 rounded-lg hover:bg-blue-200 text-sm sm:text-base text-center"
         >
-          + New Project
+          <Plus className="w-7 h-7 text-blue-600" />
         </Link>
       </div>
 
@@ -50,7 +50,7 @@ export default function ProjectsList() {
                 to={`/projects/${p.id}`}
                 className="text-blue-600 hover:underline text-sm sm:text-base"
               >
-                View
+                <Eye className="w-5 h-5 text-blue-600" title="View Project" />
               </Link>
             </div>
           ))

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { ArrowLeft } from "lucide-react";
 
 export default function ProjectForm() {
   const { user } = useAuth();
@@ -72,9 +73,9 @@ export default function ProjectForm() {
     <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
       >
-        ← Back
+        <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
       <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">
         {editing ? "Edit Project" : "Create Project"}

@@ -71,7 +71,7 @@ export default function SampleList() {
     <div className="p-6 max-w-2xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
       >
         <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
@@ -107,12 +107,11 @@ export default function SampleList() {
 
       <button
         onClick={handleAddSampleClick}
-        className="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+        className="mt-6 inline-block px-4 py-2 rounded-lg hover:bg-green-200"
       >
-        <Plus className="w-5 h-5 text-white" />
+        <Plus className="w-5 h-5 text-green-600" />
       </button>
 
-      {/* Modal */}
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -134,7 +133,8 @@ export default function SampleList() {
                 onClick={() => handleChoose("currentProject")}
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                ➕ Add to Current Project
+                <Plus className="w-7 h-7 text-blue-600" /> Add to Current
+                Project
               </button>
             )}
             {projects.length > 0 && (

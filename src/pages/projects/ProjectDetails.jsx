@@ -74,15 +74,15 @@ export default function ProjectDetails() {
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => navigate(-1)}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
+          className="px-3 py-1 rounded hover:bg-gray-200 text-sm sm:text-base"
         >
           <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
         </button>
         <Link
           to={`/projects/${id}/edit`}
-          className="px-3 sm:px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm sm:text-base"
+          className="px-3 sm:px-4 py-2 rounded hover:bg-yellow-200 text-sm sm:text-base"
         >
-          <Pencil className="w-5 h-5 text-white" title="Edit Project" />
+          <Pencil className="w-5 h-5 text-yellow-500" title="Edit Project" />
         </Link>
       </div>
 
@@ -95,9 +95,9 @@ export default function ProjectDetails() {
         <h2 className="text-lg sm:text-xl font-semibold">Samples</h2>
         <Link
           to={`/samples/new?projectId=${id}`}
-          className="p-2 bg-blue-600 rounded hover:bg-blue-700"
+          className="p-2rounded hover:bg-blue-200"
         >
-          <Plus className="w-5 h-5 text-white" />
+          <Plus className="w-7 h-7 text-blue-600" />
         </Link>
       </div>
 

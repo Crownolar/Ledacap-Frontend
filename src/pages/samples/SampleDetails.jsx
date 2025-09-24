@@ -60,7 +60,7 @@ export default function SampleDetails() {
     <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-xl">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+        className="mb-4 px-3 py-1 rounded hover:bg-gray-200 text-sm"
       >
         <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
       </button>
@@ -87,9 +87,9 @@ export default function SampleDetails() {
 
       <button
         onClick={() => navigate(`/samples/${id}/edit`)}
-        className="mt-8 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+        className="mt-8 px-6 py-2 rounded-lg hover:bg-yellow-200"
       >
-        <Pencil className="w-5 h-5 text-white" />
+        <Pencil className="w-5 h-5 text-yellow-500" />
       </button>
     </div>
   );

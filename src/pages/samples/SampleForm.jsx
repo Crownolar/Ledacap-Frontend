@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { ArrowLeft } from "lucide-react";
 
 const STORAGE_KEY = "samples";
 
@@ -132,13 +133,15 @@ export default function SampleForm() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-3 py-1 mr-52 bg-gray-200 rounded hover:bg-gray-300 text-sm sm:text-base"
-      >
-        ← Back
-      </button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 gap-3">
+      <div className="w-full max-w-2xl h-9 flex items-center">
+        <button
+          onClick={() => navigate(-1)}
+          className=" px-3 py-2 rounded hover:bg-gray-200 text-sm sm:text-base"
+        >
+          <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
+        </button>
+      </div>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg space-y-6"
