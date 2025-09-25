@@ -28,7 +28,6 @@ export default function ReviewerDashboard() {
     ).length;
     const total = samples.length;
 
-    // Group by sample_type
     const typeMap = {};
     samples.forEach((s) => {
       if (!typeMap[s.sample_type]) {
