@@ -134,22 +134,22 @@ export default function SampleForm() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 gap-3">
-      <div className="w-full max-w-2xl h-9 flex items-center">
-        <button
-          onClick={() => navigate(-1)}
-          className=" px-3 py-2 rounded hover:bg-gray-200 text-sm sm:text-base"
-        >
-          <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
-        </button>
-      </div>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg space-y-6"
       >
-        <h2 className="text-2xl font-bold text-gray-800 text-center">
-          {id ? "Edit Sample" : "New Sample"}
-        </h2>
-
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="p-2 rounded hover:bg-gray-200"
+          >
+            <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
+          </button>
+          <h2 className="text-2xl font-bold text-gray-800">
+            {id ? "Edit Sample" : "New Sample"}
+          </h2>
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Site ID <span className="text-red-500">*</span>
@@ -185,16 +185,13 @@ export default function SampleForm() {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Status
           </label>
-          <select
+          <input
+            type="text"
             name="status"
             value={form.status}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="pending">Pending</option>
-            <option value="cleared">Cleared</option>
-            <option value="high-risk">High Risk</option>
-          </select>
+            readOnly
+            className="w-full border border-gray-300 rounded-md p-3 bg-gray-100 text-gray-700 cursor-not-allowed"
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

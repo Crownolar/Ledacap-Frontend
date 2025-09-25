@@ -35,7 +35,7 @@ export default function Navbar() {
     ],
     reviewer: [
       { to: "/dashboard/reviewer", label: "Dashboard" },
-      { to: "/projects", label: "Projects" },
+      { to: "/samples", label: "Samples" },
       { to: "/reviews", label: "Reviews" },
     ],
   };

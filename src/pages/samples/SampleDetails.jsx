@@ -1,12 +1,122 @@
+// import { useParams, useNavigate } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import { ArrowLeft, Pencil } from "lucide-react";
+
+// const STORAGE_KEY = "samples";
+
+// export default function SampleDetails() {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const [sample, setSample] = useState(null);
+
+//   useEffect(() => {
+//     const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+//     const found = samples.find((s) => String(s.id) === id);
+//     if (found) {
+//       if (!found.gps) {
+//         navigator.geolocation.getCurrentPosition(
+//           (pos) => {
+//             const gps = {
+//               lat: pos.coords.latitude.toFixed(6),
+//               lng: pos.coords.longitude.toFixed(6),
+//             };
+//             found.gps = gps;
+
+//             const updated = samples.map((s) =>
+//               String(s.id) === id ? { ...s, gps } : s
+//             );
+//             localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+//             setSample({ ...found });
+//           },
+//           (err) => {
+//             console.warn("GPS not available:", err.message);
+//             setSample(found);
+//           }
+//         );
+//       } else {
+//         setSample(found);
+//       }
+//     } else {
+//       setSample(null);
+//     }
+//   }, [id]);
+
+//   if (!sample) {
+//     return (
+//       <div className="p-6 text-center">
+//         <h1 className="text-xl font-bold text-red-500">❌ Sample not found</h1>
+//         <button
+//           onClick={() => navigate("/samples")}
+//           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+//         >
+//           Back to Samples
+//         </button>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-xl">
+//       <div className="flex justify-between items-center gap-3 mb-4">
+//         <button
+//           onClick={() => navigate(-1)}
+//           className=" px-3 py-1 rounded hover:bg-gray-200 text-sm"
+//         >
+//           <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
+//         </button>
+//         <button
+//           onClick={() => navigate(`/samples/${id}/edit`)}
+//           className=" px-6 py-2 rounded-lg hover:bg-yellow-200"
+//         >
+//           <Pencil className="w-5 h-5 text-yellow-500" />
+//         </button>
+//       </div>
+
+//       <h1 className="text-2xl font-bold mb-6 text-gray-800">
+//         {sample.project_name || `Sample #${sample.id}`}
+//       </h1>
+
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <DetailCard label="Site ID" value={sample.site_id} />
+//         <DetailCard label="Type" value={sample.sample_type} />
+//         <DetailCard label="Status" value={sample.status} />
+//         <DetailCard label="Date Collected" value={sample.date_collected} />
+//         <DetailCard label="Collected By" value={sample.collected_by} />
+//         <DetailCard label="Lead Level" value={sample.lead_level} />
+//         <DetailCard label="Notes" value={sample.notes || "—"} />
+//         <DetailCard
+//           label="GPS"
+//           value={
+//             sample.gps ? `${sample.gps.lat}, ${sample.gps.lng}` : "Locating..."
+//           }
+//         />
+//       </div>
+//     </div>
+//   );
+// }
+
+// const DetailCard = ({ label, value }) => {
+//   return (
+//     <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
+//       <p className="text-sm text-gray-500">{label}</p>
+//       <p className="font-semibold text-gray-800">{value}</p>
+//     </div>
+//   );
+// };
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { AlertTriangle, ArrowLeft, CheckCircle, Pencil } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 const STORAGE_KEY = "samples";
 
 export default function SampleDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [sample, setSample] = useState(null);
 
   useEffect(() => {
@@ -42,6 +152,21 @@ export default function SampleDetails() {
     }
   }, [id]);
 
+  const handleStatusUpdate = (newStatus) => {
+    const samples = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const updated = samples.map((s) =>
+      String(s.id) === id ? { ...s, status: newStatus } : s
+    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setSample((prev) => ({ ...prev, status: newStatus }));
+
+    toast.success(`Sample marked as ${newStatus.toUpperCase()}`);
+
+    setTimeout(() => {
+      navigate("/reviews");
+    }, 1200);
+  };
+
   if (!sample) {
     return (
       <div className="p-6 text-center">
@@ -65,12 +190,15 @@ export default function SampleDetails() {
         >
           <ArrowLeft className="w-5 h-5 text-black" title="Go Back" />
         </button>
-        <button
-          onClick={() => navigate(`/samples/${id}/edit`)}
-          className=" px-6 py-2 rounded-lg hover:bg-yellow-200"
-        >
-          <Pencil className="w-5 h-5 text-yellow-500" />
-        </button>
+
+        {user?.role === "admin" || user?.role === "researcher" ? (
+          <button
+            onClick={() => navigate(`/samples/${id}/edit`)}
+            className=" px-6 py-2 rounded-lg hover:bg-yellow-200"
+          >
+            <Pencil className="w-5 h-5 text-yellow-500" />
+          </button>
+        ) : null}
       </div>
 
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -92,6 +220,23 @@ export default function SampleDetails() {
           }
         />
       </div>
+
+      {user?.role === "reviewer" && sample.status === "pending" && (
+        <div className="mt-6 flex justify-between gap-3">
+          <button
+            onClick={() => handleStatusUpdate("cleared")}
+            className="px-4 py-2 rounded hover:bg-green-200"
+          >
+            <CheckCircle className="w-6 h-6 text-green-600" />
+          </button>
+          <button
+            onClick={() => handleStatusUpdate("high-risk")}
+            className="px-4 py-2 rounded hover:bg-red-200"
+          >
+            <AlertTriangle className="w-6 h-6 text-red-600" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
